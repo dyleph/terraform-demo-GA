@@ -44,7 +44,13 @@ jobs:
           then
             rm "tf_plan"
           fi
-      # Generates an execution plan for Terraform
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
       - name: Terraform Plan
         run: |
           terraform plan -out "tf_plan" -input=false
