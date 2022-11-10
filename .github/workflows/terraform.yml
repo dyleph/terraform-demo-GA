@@ -1,8 +1,9 @@
-name: terraform-automation
+name: Terraform Deployment
 
 on:
-  pull_request:
-  push: { branches: [main] }
+  push:
+    branches:
+      - main
 
 defaults:
   run:
