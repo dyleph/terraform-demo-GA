@@ -17,16 +17,15 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    if: github.event_name == 'push' || github.event_name != 'pull_request'
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup ssh-key
-        uses: webfactory/ssh-agent@v0.6.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+#      - name: Setup ssh-key
+#        uses: webfactory/ssh-agent@v0.6.0
+#        with:
+#          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -39,26 +38,28 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile smg-auto-dev
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile smg-auto-dev
 
-      # Generates an execution plan for Terraform
-      - name: Terraform Plan
-        continue-on-error: true
+      - name: Remove tf_plan if it had
         run: |
-          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/tf_init.sh"
-          "${GITHUB_WORKSPACE}/.github/workflows/tf_init.sh"
+          if [ -f "tf_plan" ]; 
+          then
+            rm "tf_plan"
+          fi
 
-          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/tf_fmt.sh"
-          "${GITHUB_WORKSPACE}/.github/workflows/tf_fmt.sh"
+      - name: Terraform Init
+        run: terraform init
 
-          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/tf_plan_check.sh"
-          "${GITHUB_WORKSPACE}/.github/workflows/tf_plan_check.sh"
-          
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: |
           terraform plan -out "tf_plan" -input=false
 
       - name: Upload TF Plan
         uses: actions/upload-artifact@v2
         with:
           name: tf_plan
-          path: ./tf_plan
+          path: .
           if-no-files-found: error
           retention-days: 1
 
@@ -77,10 +78,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Setup ssh-key
-      uses: webfactory/ssh-agent@v0.6.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+#    - name: Setup ssh-key
+#      uses: webfactory/ssh-agent@v0.6.0
+#      with:
+#        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -99,10 +100,11 @@ jobs:
         name: tf_plan
         path: .
 
+    - name: Terraform Init
+      run: terraform init
+
     # Provision resources via Terraform        
     - name: Terraform Apply
       run: |
-        chmod +x "${GITHUB_WORKSPACE}/.github/workflows/tf_init.sh"
-        "${GITHUB_WORKSPACE}/.github/workflows/tf_init.sh"
         terraform show "tf_plan"
         terraform apply "tf_plan"
