@@ -47,7 +47,7 @@ jobs:
       # Generates an execution plan for Terraform
       - name: Terraform Plan
         run: |
-          terraform plan --no-color -out "tf_plan" -input=false
+          terraform plan -out "tf_plan" -input=false
 
       - name: Upload TF Plan
         uses: actions/upload-artifact@v2
