@@ -100,10 +100,11 @@ jobs:
         name: tf_plan
         path: .
 
+    - name: Terraform Init
+      run: terraform init
+
     # Provision resources via Terraform        
     - name: Terraform Apply
       run: |
-        chmod +x "${GITHUB_WORKSPACE}/.github/workflows/tf_init.sh"
-        "${GITHUB_WORKSPACE}/.github/workflows/tf_init.sh"
         terraform show "tf_plan"
         terraform apply "tf_plan"
