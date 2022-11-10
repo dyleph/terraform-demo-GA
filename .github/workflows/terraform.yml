@@ -38,20 +38,15 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile smg-auto-dev
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile smg-auto-dev
 
+      - name: Remove tf_plan if it had
+        run: |
+          if [ -f "tf_plan" ]; 
+          then
+            rm "tf_plan"
+          fi
       # Generates an execution plan for Terraform
       - name: Terraform Plan
-        continue-on-error: true
-        run: |
-          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/tf_init.sh"
-          "${GITHUB_WORKSPACE}/.github/workflows/tf_init.sh"
-
-          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/tf_fmt.sh"
-          "${GITHUB_WORKSPACE}/.github/workflows/tf_fmt.sh"
-
-          chmod +x "${GITHUB_WORKSPACE}/.github/workflows/tf_plan_check.sh"
-          "${GITHUB_WORKSPACE}/.github/workflows/tf_plan_check.sh"
-          
-          terraform plan -out "tf_plan" -input=false
+        run: terraform plan --no-color -out "tf_plan" -input=false
 
       - name: Upload TF Plan
         uses: actions/upload-artifact@v2
