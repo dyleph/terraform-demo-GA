@@ -18,9 +18,9 @@ terraform {
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
-resource "aws_instance" "ubuntu" {
-  ami            = "ami-07651f0c4c315a529"
-  instance_type  = "t3.micro"
-  subnet_id      = "subnet-09903fd5eb7eccfc0"
-}
+#resource "aws_instance" "ubuntu" {
+#  ami            = "ami-07651f0c4c315a529"
+#  instance_type  = "t3.micro"
+#  subnet_id      = "subnet-09903fd5eb7eccfc0"
+#}
 
