@@ -56,7 +56,7 @@ jobs:
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
-          approvers: dyleph
+          approvers: ${{ secrets.APPROVERS }}
           minimum-approvals: 1
           issue-title: "Review the plan before going to apply"
           exclude-workflow-initiator-as-approver: false
