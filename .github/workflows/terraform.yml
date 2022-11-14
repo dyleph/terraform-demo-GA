@@ -37,7 +37,6 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
 
       - name: Add profile credentials to ~/.aws/credentials
         run: |
@@ -59,6 +58,7 @@ jobs:
           secret: ${{ github.TOKEN }}
           approvers: dyleph
           minimum-approvals: 1
+          issue-title: "Review the plan before going to apply"
           exclude-workflow-initiator-as-approver: false
 
       - name: Terraform Apply
