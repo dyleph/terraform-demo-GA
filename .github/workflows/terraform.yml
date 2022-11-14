@@ -50,45 +50,8 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Manual approval
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: dyleph
-          minimum-approvals: 1
-          exclude-workflow-initiator-as-approver: false
-
       - name: Terraform Plan
-        run: |
-          terraform plan
-
-  terraform_apply:
-    name: 'Terraform Apply'
-    runs-on: ubuntu-latest
-    needs: terraform_plan
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment:
-      name: tf_apply
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      #    - name: Setup ssh-key
-      #      uses: webfactory/ssh-agent@v0.6.0
-      #      with:
-      #        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
-
-      - name: Add profile credentials to ~/.aws/credentials
-        run: |
-          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ env.PROFILE_NAME }}
-          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ env.PROFILE_NAME }}
+        run: terraform plan
 
       - name: Manual approval
         uses: trstringer/manual-approval@v1
@@ -98,10 +61,6 @@ jobs:
           minimum-approvals: 1
           exclude-workflow-initiator-as-approver: false
 
-      - name: Terraform Init
-        run: terraform init
-
-      # Provision resources via Terraform
       - name: Terraform Apply
-        run: |
-          terraform apply -auto-approve
+        run: terraform apply -auto-approve
+
