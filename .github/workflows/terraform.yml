@@ -8,6 +8,11 @@ on:
     branches:
       - main
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  PROFILE_NAME: 'smg-auto-dev'
+
 defaults:
   run:
     shell: bash
@@ -34,8 +39,8 @@ jobs:
 
       - name: Add profile credentials to ~/.aws/credentials
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile smg-auto-dev 
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile smg-auto-dev
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ env.PROFILE_NAME }} 
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ env.PROFILE_NAME }}
 
       - name: Terraform Init
         run: terraform init
