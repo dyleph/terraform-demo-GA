@@ -53,6 +53,7 @@ jobs:
         run: terraform plan
 
       - name: Manual approval
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
@@ -62,5 +63,5 @@ jobs:
           exclude-workflow-initiator-as-approver: false
 
       - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
-
