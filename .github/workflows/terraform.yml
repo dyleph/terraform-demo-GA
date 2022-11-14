@@ -50,6 +50,14 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      - name: Manual approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: dyleph
+          minimum-approvals: 1
+          exclude-workflow-initiator-as-approver: false
+
       - name: Terraform Plan
         run: |
           terraform plan
@@ -81,6 +89,14 @@ jobs:
         run: |
           aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ env.PROFILE_NAME }}
           aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ env.PROFILE_NAME }}
+
+      - name: Manual approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: dyleph
+          minimum-approvals: 1
+          exclude-workflow-initiator-as-approver: false
 
       - name: Terraform Init
         run: terraform init
