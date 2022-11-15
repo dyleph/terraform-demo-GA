@@ -36,7 +36,6 @@ jobs:
         with:
           host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY_GITHUB }}
-          private-key-name: github
 
       - name: Clone other private repository
         run: |
