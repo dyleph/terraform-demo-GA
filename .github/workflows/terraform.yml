@@ -75,8 +75,8 @@ jobs:
         uses: toppulous/create-manual-approval-issue@master
         with:
           label: dev-approval
-          - run: |
-              echo 'First issue id ${{ steps.issue1.outputs.issue-number }}'
+      - run: |
+          echo 'First issue id ${{ steps.issue1.outputs.issue-number }}'
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
