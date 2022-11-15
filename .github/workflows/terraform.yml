@@ -31,6 +31,9 @@ jobs:
       #        uses: webfactory/ssh-agent@v0.6.0
       #        with:
       #          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Clone other private repository
+        run: |
+          git clone git@github.com:dyleph/terraform-demo-with-GA.git
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
