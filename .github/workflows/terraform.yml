@@ -58,6 +58,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
+        id: plan
         run: terraform plan -out saved_plan
 
 #      - name: Manual approval
