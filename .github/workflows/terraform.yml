@@ -60,15 +60,23 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
-      - name: Manual approval
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: trstringer/manual-approval@v1
+#      - name: Manual approval
+#        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+#        uses: trstringer/manual-approval@v1
+#        with:
+#          secret: ${{ github.TOKEN }}
+#          approvers: ${{ secrets.APPROVERS }}
+#          minimum-approvals: 1
+#          issue-title: "Review the plan before going to apply"
+#          exclude-workflow-initiator-as-approver: false
+
+      - name: Create initial issue
+        id: issue1
+        uses: toppulous/create-manual-approval-issue@master
         with:
-          secret: ${{ github.TOKEN }}
-          approvers: ${{ secrets.APPROVERS }}
-          minimum-approvals: 1
-          issue-title: "Review the plan before going to apply"
-          exclude-workflow-initiator-as-approver: false
+          label: dev-approval
+          - run: |
+              echo 'First issue id ${{ steps.issue1.outputs.issue-number }}'
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
