@@ -64,7 +64,7 @@ jobs:
       - name: Slack notify successful
         id: slack-notify-successful
         uses: slackapi/slack-github-action@v1.23.0
-        if: success()
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && success()
         with:
           payload: |
             {
@@ -77,7 +77,7 @@ jobs:
       - name: Slack notify failure
         id: slack-notify-failure
         uses: slackapi/slack-github-action@v1.23.0
-        if: failure()
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && failure()
         with:
           payload: |
             {
