@@ -96,5 +96,5 @@ jobs:
         with:
           payload: |
             {
-              "text": ":boom: ${{ github.event.repository.name }} failed: ${{ github.event.pull_request.html_url }}"  
+              "text": ":boom: ${{ github.event.repository.name }} failed: ${{ env.WORKFLOW_URL }}"  
             }
