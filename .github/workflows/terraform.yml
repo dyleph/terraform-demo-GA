@@ -79,20 +79,20 @@ jobs:
         if: success()
         with:
           # For posting a rich message using Block Kit
-          # payload: |
-          #   {
-          #     "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-          #     "blocks": [
-          #       {
-          #         "type": "section",
-          #         "text": {
-          #           "type": "mrkdwn",
-          #           "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-          #         }
-          #       }
-          #     ]
-          #   }
-          slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.user.login }} deployed new changes successfully \n> $(git log -1 --pretty=%s)"
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
+          #slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.user.login }} deployed new changes successfully \n> $(git log -1 --pretty=%s)"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
@@ -102,7 +102,10 @@ jobs:
         uses: slackapi/slack-github-action@v1.23.0
         if: failure()
         with:
-          slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.user.login }} failed to deploynew changes \n> $(git log -1 --pretty=%s)"
+          payload: |
+            {
+              "text": "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.user.login }} failed to deploynew changes \n> $(git log -1 --pretty=%s)",
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
