@@ -79,7 +79,7 @@ jobs:
         with:
           payload: |
             {
-              "text": ":boom: ${{ github.event.repository.name }} failed: ${{ github.event.head_commit.message }}"
+              "text": ":boom: ${{ github.event.repository.name }} failed: ${{ github.event.head_commit.message }}"  
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
