@@ -81,16 +81,7 @@ jobs:
           # For posting a rich message using Block Kit
           payload: |
             {
-              "text": "GitHub Action build result: ${{ job.status }}\n>${{ github.event.head_commit.message }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                  }
-                }
-              ]
+              "text": ":rocket: ${{ env.PROFILE_NAME }} has been deployed successfully\n>${{ github.event.head_commit.message }}"
             }
           #slack-message: "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.user.login }} deployed new changes successfully \n> $(git log -1 --pretty=%s)"
         env:
@@ -104,7 +95,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "GitHub build result: ${{ job.status }}\n${{ github.event.pull_request.user.login }} failed to deploy new changes\n>${{ github.event.head_commit.message }}"
+              "text": ":boom: ${{ env.PROFILE_NAME }} failed to deploy\n>${{ github.event.head_commit.message }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
