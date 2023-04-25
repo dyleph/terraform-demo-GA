@@ -77,23 +77,24 @@ jobs:
       - name: Slack notify successful
         id: slack-notify-successful
         uses: slackapi/slack-github-action@v1.23.0
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && success()
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && success()        
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK          
         with:
           payload: |
             "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}: ${{ github.event.head_commit.message }}\"}"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - name: Slack notify failure
         id: slack-notify-failure
         uses: slackapi/slack-github-action@v1.23.0
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' && failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          WORKFLOW_URL: "${{ github.server_url }}/${{ github.repository }}/actions/run/${{ github.run_id }}"
         with:
           payload: |
             {
               "text": ":boom: ${{ github.event.repository.name }} failed: ${{ github.event.pull_request.html_url }}"  
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
