@@ -95,6 +95,4 @@ jobs:
           WORKFLOW_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         with:
           payload: |
-            {
-              "text": ":boom: ${{ github.event.repository.name }} failed: ${{ env.WORKFLOW_URL }}"  
-            }
+            "{\"text\":\":boom: ${{ github.event.repository.name }} failed: ${{ env.WORKFLOW_URL }}\"}"
