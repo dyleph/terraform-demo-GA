@@ -92,7 +92,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-          WORKFLOW_URL: "${{ github.server_url }}/${{ github.repository }}/actions/run/${{ github.run_id }}"
+          WORKFLOW_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         with:
           payload: |
             {
