@@ -61,6 +61,8 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
       
+      - name: Get commit message
+        run: echo 
       - name: Slack notify successful
         id: slack-notify-successful
         uses: slackapi/slack-github-action@v1.23.0
@@ -70,7 +72,17 @@ jobs:
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         with:
           payload: |
-            "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}\n>${{ github.event.commits[0].message }}\"}"
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":rocket: Deployed ${{ github.event.repository.name }}\n>${{ toJSON(github.event.head_commit.message) }}"
+                  }
+                }
+              ]
+            }
 
       - name: Slack notify failure
         id: slack-notify-failure
