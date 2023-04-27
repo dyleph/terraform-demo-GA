@@ -72,6 +72,7 @@ jobs:
           payload: |
             "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}\n>$(git log -1 --pretty=%s)\"}"
 
+
       - name: Slack notify failure
         id: slack-notify-failure
         uses: slackapi/slack-github-action@v1.23.0
