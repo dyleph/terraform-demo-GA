@@ -71,6 +71,7 @@ jobs:
         with:
           payload: |
             "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}\n>$${{ github.event.commits[0].message }}\"}"
+            
 
       - name: Slack notify failure
         id: slack-notify-failure
