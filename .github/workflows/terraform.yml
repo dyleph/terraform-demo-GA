@@ -64,13 +64,13 @@ jobs:
       - name: Slack notify successful
         id: slack-notify-successful
         uses: slackapi/slack-github-action@v1.23.0
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && success()        
+        if: success()        
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK          
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         with:
           payload: |
-            "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}\n>${{ github.event.head_commit.message }}\"}"
+            "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}\n>${{ toJSON(github.event.head_commit.message) }}\"}"
 
       - name: Slack notify failure
         id: slack-notify-failure
