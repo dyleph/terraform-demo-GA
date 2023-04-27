@@ -68,10 +68,10 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        run: echo "::set-env name=GIT_LOG::$(git log -1 --pretty=%s)"
         with:
           payload: |
-            "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}\n>$(git log -1 --pretty=%s)\"}"
-
+            "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}\n>${{ env.GIT_LOG }}\"}"
 
       - name: Slack notify failure
         id: slack-notify-failure
