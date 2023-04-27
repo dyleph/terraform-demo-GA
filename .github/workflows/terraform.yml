@@ -60,7 +60,10 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
-      
+
+      - name: Get commit message
+        run: echo "::set-env name=GIT_LOG::$(git log -1 --pretty=%s)"
+          
       - name: Slack notify successful
         id: slack-notify-successful
         uses: slackapi/slack-github-action@v1.23.0
@@ -68,7 +71,6 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        run: echo "::set-env name=GIT_LOG::$(git log -1 --pretty=%s)"
         with:
           payload: |
             "{\"text\":\":rocket: Deployed ${{ github.event.repository.name }}\n>${{ env.GIT_LOG }}\"}"
