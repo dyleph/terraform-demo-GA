@@ -60,11 +60,6 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
-      
-      - name: Get commit message
-        id: get-commit-message
-        run: |
-          echo "COMMIT_MESSAGE=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
 
       - name: Slack notify successful
         id: slack-notify-successful
